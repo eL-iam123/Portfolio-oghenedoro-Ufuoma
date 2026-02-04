@@ -80,7 +80,7 @@ const grid = document.getElementById("projectsGrid");
 
 if (grid) {
   grid.innerHTML = projects.map(p => `
-    <article class="project">
+    <article class="project reveal">
       <div class="project__img">
         <div class="project__placeholder">${p.title}</div>
       </div>
@@ -104,7 +104,7 @@ const sideQuestGrid = document.getElementById("sideQuestGrid");
 
 if (sideQuestGrid) {
   sideQuestGrid.innerHTML = sideQuests.map(sq => `
-    <article class="project">
+    <article class="project reveal">
       <div class="project__img">
         <div class="project__placeholder">${sq.title}</div>
       </div>
@@ -130,7 +130,10 @@ if (sideQuestGrid) {
 // Stack rendering moved to static HTML in Index.html
 
 // ===== Footer year =====
-document.getElementById("year").textContent = String(new Date().getFullYear());
+function setFooterYear(){
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+}
 
 // ===== Simple animated counters =====
 function animateCount(id, target) {
@@ -151,6 +154,34 @@ function animateCount(id, target) {
 animateCount("stat1", 12);
 animateCount("stat2", 8);
 animateCount("stat3", 3);
+
+// ===== Reveal-on-scroll and small UI animations =====
+function setupRevealAnimations(){
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return; // avoid animations if user prefers reduced motion
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// run after DOM content is ready
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', () => {
+    setFooterYear();
+    setupRevealAnimations();
+  });
+} else {
+  setFooterYear();
+  setupRevealAnimations();
+}
 
 // ===== Contact form =====
 const form = document.getElementById("contactForm");
@@ -177,3 +208,22 @@ if (!available) {
   nowText.textContent = "Currently unavailable";
   nowStatus.style.color = "#ef4444";
 }
+
+// ===== Time-based theme (light/dark) =====
+function applyTimeTheme() {
+  try {
+    const h = new Date().getHours();
+    // dark: 19:00 - 06:59, light: 07:00 - 18:59
+    const dark = (h >= 19 || h < 7);
+    document.body.classList.remove("theme-dark", "theme-light");
+    document.body.classList.add(dark ? "theme-dark" : "theme-light");
+  } catch (e) {
+    // no-op
+  }
+}
+
+// Apply on load
+applyTimeTheme();
+
+// Optionally re-apply every 30 minutes to catch time changes while page is open
+setInterval(applyTimeTheme, 30 * 60 * 1000);
