@@ -73,13 +73,7 @@ const sideQuests = [
   }
 ];
 
-const stackGroups = [
-  { label: "Frontend", items: ["HTML", "CSS", "JavaScript"] },
-  { label: "Backend", items: ["Node.js", "Python"] },
-  { label: "Database", items: ["PostgreSQL", "Supabase"] },
-  { label: "APIs & Infra", items: ["REST APIs", "Auth", "Webhooks"] },
-  { label: "Tooling", items: ["Git/GitHub", "CLI", "Debugging"] }
-];
+// stackGroups removed — stack is rendered as static HTML in Index.html
 
 // ===== Render projects =====
 const grid = document.getElementById("projectsGrid");

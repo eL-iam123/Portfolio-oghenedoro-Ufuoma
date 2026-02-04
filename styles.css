@@ -332,6 +332,50 @@ body{
   border: 1px solid rgba(124, 92, 255, 0.2);
 }
 
+/* Compact hero mini stack */
+.hero__mini{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+}
+
+.mini-stack{
+  background: transparent;
+  padding: 0;
+}
+
+.mini-stack__title{
+  display:block;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.mini-stack__list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  color:var(--muted);
+  font-size:0.95rem;
+}
+
+.mini-stack__list li{ margin: 4px 0 }
+
+/* Stack groups responsive improvements */
+.stackGroup{ max-width: 720px }
+
+@media (max-width: 900px){
+  .stackGroup__items{ gap:8px }
+  .tag{ padding:6px 10px; font-size:0.9rem }
+  .hero{ padding:40px 0 }
+}
+
+@media (max-width: 600px){
+  .hero__mini{ flex-direction:column; gap:8px }
+  .hero__card .card{ padding:16px }
+  .avatar{ height:160px }
+}
+
 /* About section */
 .about{
   background: var(--card);
