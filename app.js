@@ -133,18 +133,7 @@ if (sideQuestGrid) {
   `).join("");
 }
 
-// ===== Render stack tags =====
-const tagsWrap = document.getElementById("stackTags");
-if (tagsWrap) {
-  tagsWrap.innerHTML = stackGroups.map(g => `
-    <div class="stackGroup">
-      <div class="stackGroup__label">${g.label}</div>
-      <div class="stackGroup__items">
-        ${g.items.map(i => `<span class="tag">${i}</span>`).join("")}
-      </div>
-    </div>
-  `).join("");
-}
+// Stack rendering moved to static HTML in Index.html
 
 // ===== Footer year =====
 document.getElementById("year").textContent = String(new Date().getFullYear());
