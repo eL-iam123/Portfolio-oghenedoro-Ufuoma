@@ -78,7 +78,11 @@ const sideQuests = [
 // ===== Render projects =====
 const grid = document.getElementById("projectsGrid");
 
+// Debugging logs to verify rendering
+console.log("Rendering projects and side quests...");
+
 if (grid) {
+  console.log("Rendering projects...");
   grid.innerHTML = projects.map(p => `
     <article class="project reveal">
       <div class="project__img">
@@ -103,6 +107,7 @@ if (grid) {
 const sideQuestGrid = document.getElementById("sideQuestGrid");
 
 if (sideQuestGrid) {
+  console.log("Rendering side quests...");
   sideQuestGrid.innerHTML = sideQuests.map(sq => `
     <article class="project reveal">
       <div class="project__img">
@@ -227,3 +232,42 @@ applyTimeTheme();
 
 // Optionally re-apply every 30 minutes to catch time changes while page is open
 setInterval(applyTimeTheme, 30 * 60 * 1000);
+
+// ===== Match hero card size to hero content =====
+function matchHeroCardSize() {
+  const content = document.querySelector('.hero__content');
+  const card = document.querySelector('.hero__card .card');
+  if (!content || !card) return;
+
+  // Only apply on wide screens where hero is a two-column layout
+  if (window.innerWidth <= 900) {
+    card.style.width = '';
+    card.style.height = '';
+    return;
+  }
+
+  const rect = content.getBoundingClientRect();
+  // Apply measured width/height (account for padding/border via box-sizing)
+  card.style.width = `${Math.round(rect.width)}px`;
+  card.style.height = `${Math.round(rect.height)}px`;
+}
+
+// debounce helper
+function debounce(fn, wait = 120){
+  let t = null;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), wait);
+  };
+}
+
+const _onResizeMatchHero = debounce(matchHeroCardSize, 120);
+window.addEventListener('resize', _onResizeMatchHero);
+
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', () => {
+    matchHeroCardSize();
+  });
+} else {
+  matchHeroCardSize();
+}
